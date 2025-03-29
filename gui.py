@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from PIL import Image, ImageTk
 
 
@@ -15,3 +16,21 @@ class TransalatorApp:
         img_tk = ImageTk.PhotoImage(img)
         img_label = tk.Label(root, image=img_tk, bg="#FDF6E6")
         img_label.pack()
+
+        # Ngôn ngữ chọn
+        frame_lang = tk.Frame(root, bg="gray")
+        frame_lang.pack(pady=5)
+
+        lang1 = ttk.Combobox(frame_lang, values=[
+            "english", "vietnamese", "french", "spanish"], width=15)
+        lang1.set("english")
+        lang1.grid(row=0, column=0)
+
+        swap_label = tk.Label(frame_lang, text="↔",
+                              font=("Arial", 12), bg="#FDF6E6")
+        swap_label.grid(row=0, column=1, padx=10)
+
+        lang2 = ttk.Combobox(frame_lang, values=[
+            "english", "vietnamese", "french", "spanish"], width=15)
+        lang2.set("vietnamese")
+        lang2.grid(row=0, column=2)
