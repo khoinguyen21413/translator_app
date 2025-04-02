@@ -11,7 +11,8 @@ class TransalatorApp:
         self.root.configure(bg="#FDF6E6")
 
         # Ảnh minh họa
-        img = Image.open("translator_app/assets/transalator_image_1.jpg")
+        img = Image.open(
+            "D:\\O D\\Tin học 6\\python_app\\translator_app\\assets\\transalator_image_1.jpg")
         img = img.resize((180, 114), Image.LANCZOS)
         img_tk = ImageTk.PhotoImage(img)
         img_label = tk.Label(root, image=img_tk, bg="#FDF6E6")
@@ -22,7 +23,7 @@ class TransalatorApp:
         frame_lang.pack(pady=5)
 
         lang1 = ttk.Combobox(frame_lang, values=[
-            "english", "vietnamese", "french", "spanish"], width=15)
+            "english", "vietnamese", "french", "spanish"], width=42)
         lang1.set("english")
         lang1.grid(row=0, column=0)
 
@@ -31,6 +32,16 @@ class TransalatorApp:
         swap_label.grid(row=0, column=1, padx=10)
 
         lang2 = ttk.Combobox(frame_lang, values=[
-            "english", "vietnamese", "french", "spanish"], width=15)
+            "english", "vietnamese", "french", "spanish"], width=42)
         lang2.set("vietnamese")
         lang2.grid(row=0, column=2)
+
+        # Ô nhập và hiển thị văn bản
+        frame_text = tk.Frame(self.root, bg="#FDF6E6")
+        frame_text.pack()
+
+        text_input = tk.Text(frame_text, width=35, height=8)
+        text_input.grid(row=0, column=0, padx=10, pady=5)
+
+        text_output = tk.Text(frame_text, width=35, height=8)
+        text_output.grid(row=0, column=1, padx=10, pady=5)
