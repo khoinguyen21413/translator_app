@@ -45,3 +45,45 @@ class TransalatorApp:
 
         text_output = tk.Text(frame_text, width=35, height=8)
         text_output.grid(row=0, column=1, padx=10, pady=5)
+
+        # Frame Buttons
+        frame_buttons = tk.Frame(root, bg="#FDF6E6")
+        frame_buttons.pack()
+
+        frame_buttons1 = tk.Frame(frame_buttons, bg="#FDF6E6")
+        frame_buttons1.pack(side="left")
+
+        frame_buttons2 = tk.Frame(frame_buttons, bg="#FDF6E6")
+        frame_buttons2.pack(side="right")
+
+        # Load và chỉnh kích thước copy icon
+        img_copy = Image.open(
+            "D:\\O D\\Tin học 6\\python_app\\translator_app\\assets\\copy_icon.png")
+        img_copy = img_copy.resize((30, 30), Image.LANCZOS)
+        photo_copy = ImageTk.PhotoImage(img_copy)
+
+        # Load và chỉnh kích thước sound icon
+        img_sound = Image.open(
+            "D:\\O D\\Tin học 6\\python_app\\translator_app\\assets\\sound_icon.png")
+        img_sound = img_sound.resize((30, 30), Image.LANCZOS)
+        photo_sound = ImageTk.PhotoImage(img_sound)
+
+        # Tạo button với ảnh
+        sound_btn1 = tk.Button(frame_buttons1, image=photo_sound,
+                               command=lambda: print("Đã nghe!"), borderwidth=0)
+        sound_btn1.grid(row=0, column=0, padx=10, pady=5)
+
+        # Tạo button với ảnh
+        copy_btn1 = tk.Button(frame_buttons1, image=photo_copy,
+                              command=lambda: print("Đã copy!"), borderwidth=0)
+        copy_btn1.grid(row=0, column=1, padx=10, pady=5)
+
+        # Tạo button với ảnh
+        sound_btn2 = tk.Button(frame_buttons2, image=photo_sound,
+                               command=lambda: print("Đã nghe!"), borderwidth=0)
+        sound_btn2.grid(row=0, column=2, padx=10, pady=5)
+
+        # Tạo button với ảnh
+        copy_btn2 = tk.Button(frame_buttons2, image=photo_copy,
+                              command=lambda: print("Đã copy!"), borderwidth=0)
+        copy_btn2.grid(row=0, column=3, padx=10, pady=5)
