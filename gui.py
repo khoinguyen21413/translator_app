@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 from clipboard import copy_text
+from speech import TextToSpeech
 
 
 class TransalatorApp:
@@ -71,7 +72,7 @@ class TransalatorApp:
 
         # Tạo button với ảnh
         sound_btn1 = tk.Button(frame_buttons1, image=photo_sound,
-                               command=self.speak_text, borderwidth=0)
+                               command=lambda: self.speak_text(text_input.get("1.0", "end").strip()), borderwidth=0)
         sound_btn1.grid(row=0, column=0, padx=10, pady=5)
 
         # Tạo button với ảnh
@@ -81,7 +82,7 @@ class TransalatorApp:
 
         # Tạo button với ảnh
         sound_btn2 = tk.Button(frame_buttons2, image=photo_sound,
-                               command=lambda: print("Đã nghe!"), borderwidth=0)
+                               command=lambda: self.speak_text(text_output.get("1.0", "end").strip()), borderwidth=0)
         sound_btn2.grid(row=0, column=2, padx=10, pady=5)
 
         # Tạo button với ảnh
@@ -97,8 +98,9 @@ class TransalatorApp:
     def translate_text(self):
         print("translate_text")
 
-    def speak_text(self):
-        print("speak_text")
+    def speak_text(self, text):
+        tts = TextToSpeech()
+        tts.speak(text=text)
 
     def copy_text(self, text):
         copy_text(text)
