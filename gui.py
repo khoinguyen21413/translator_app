@@ -87,3 +87,8 @@ class TransalatorApp:
         copy_btn2 = tk.Button(frame_buttons2, image=photo_copy,
                               command=lambda: print("Đã copy!"), borderwidth=0)
         copy_btn2.grid(row=0, column=3, padx=10, pady=5)
+
+        # Tạo button chức năng dịch
+        translate_button = tk.Button(self.root, text="Translate", font=(
+            "Arial", 12, "bold"), bg="#D0E1F9", relief="raised", command=lambda: print("Đã dịch!"), width="35")
+        translate_button.pack(pady=10)
