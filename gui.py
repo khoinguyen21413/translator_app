@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
-from clipboard import copy_text
+from clipboard import Clipboard
 from speech import TextToSpeech
 
 
@@ -103,4 +103,5 @@ class TransalatorApp:
         tts.speak(text=text)
 
     def copy_text(self, text):
-        copy_text(text)
+        cl = Clipboard()
+        cl.copy_text(text)
