@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
+from clipboard import copy_text
 
 
 class TransalatorApp:
@@ -70,12 +71,12 @@ class TransalatorApp:
 
         # Tạo button với ảnh
         sound_btn1 = tk.Button(frame_buttons1, image=photo_sound,
-                               command=lambda: print("Đã nghe!"), borderwidth=0)
+                               command=self.speak_text, borderwidth=0)
         sound_btn1.grid(row=0, column=0, padx=10, pady=5)
 
         # Tạo button với ảnh
         copy_btn1 = tk.Button(frame_buttons1, image=photo_copy,
-                              command=lambda: print("Đã copy!"), borderwidth=0)
+                              command=lambda: self.copy_text(text_input.get("1.0", "end").strip()), borderwidth=0)
         copy_btn1.grid(row=0, column=1, padx=10, pady=5)
 
         # Tạo button với ảnh
@@ -85,10 +86,19 @@ class TransalatorApp:
 
         # Tạo button với ảnh
         copy_btn2 = tk.Button(frame_buttons2, image=photo_copy,
-                              command=lambda: print("Đã copy!"), borderwidth=0)
+                              command=lambda: self.copy_text(text_output.get("1.0", "end").strip()), borderwidth=0)
         copy_btn2.grid(row=0, column=3, padx=10, pady=5)
 
         # Tạo button chức năng dịch
         translate_button = tk.Button(self.root, text="Translate", font=(
-            "Arial", 12, "bold"), bg="#D0E1F9", relief="raised", command=lambda: print("Đã dịch!"), width="35")
+            "Arial", 12, "bold"), bg="#D0E1F9", relief="raised", command=self.translate_text, width="35")
         translate_button.pack(pady=10)
+
+    def translate_text(self):
+        print("translate_text")
+
+    def speak_text(self):
+        print("speak_text")
+
+    def copy_text(self, text):
+        copy_text(text)
