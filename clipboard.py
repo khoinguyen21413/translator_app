@@ -1,15 +1,14 @@
 # use module pyperclip
 import pyperclip
-from ttkbootstrap.toast import ToastNotification
+from tkinter import messagebox
 
 
 class Clipboard:
-    def __init__(self):
-        pass
+    def __init__(self, root):
+        self.root = root
 
-    def copy_text(text):
+    def copy_text(self,text):
         if text:
             pyperclip.copy(text)
             print("Clipboard thanh cong: -->>>> ",  pyperclip.paste())
-            ToastNotification(
-                title="Thông báo", message="Đã sao chép vào clipboard!", duration=3000).show_toast()
+            messagebox.showinfo("Sao chép thành công", "Đã sao chép thành công")

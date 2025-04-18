@@ -138,5 +138,5 @@ class TransalatorApp:
         tts.speak(text=text)
 
     def copy_text(self, text):
-        cl = Clipboard()
+        cl = Clipboard(self.root)
         cl.copy_text(text)
