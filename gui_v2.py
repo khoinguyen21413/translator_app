@@ -20,7 +20,7 @@ class TransalatorApp:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Ứng dụng dịch ngôn ngữ - khoi nguyen")
+        self.root.title("Translator App by Khoi Nguyen")
         self.root.geometry("650x450")
         self.root.configure(bg=self.background_color)
 
