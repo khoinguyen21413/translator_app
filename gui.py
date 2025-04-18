@@ -16,7 +16,7 @@ class TransalatorApp:
             "japanese": "ja"
     }
 
-    background_color ='red'
+    background_color ='#FDF6E6'
 
     def __init__(self, root):
         self.root = root
@@ -38,16 +38,24 @@ class TransalatorApp:
         frame_lang = tk.Frame(root, bg="gray")
         frame_lang.pack(pady=5)
 
-        lang1 = ttk.Combobox(frame_lang, values=language_list, width=32)
-        lang1.set("english")
+        # Biến StringVar để liên kết với OptionMenu
+        self.lang1_var = tk.StringVar()
+        self.lang1_var.set("english")  # mặc định
+
+        self.lang2_var = tk.StringVar()
+        self.lang2_var.set("vietnamese")  # mặc định
+
+        # OptionMenu thay cho Combobox
+        lang1 = tk.OptionMenu(frame_lang, self.lang1_var, *language_list)
+        lang1.config(width=32)  # giống Combobox
         lang1.grid(row=0, column=0)
 
         swap_label = tk.Label(frame_lang, text="↔",
-                              font=("Arial", 12), bg=self.background_color)
+                            font=("Arial", 12), bg=self.background_color)
         swap_label.grid(row=0, column=1, padx=10)
 
-        lang2 = ttk.Combobox(frame_lang, values=language_list_no_first, width=32)
-        lang2.set("vietnamese")
+        lang2 = tk.OptionMenu(frame_lang, self.lang2_var, *language_list_no_first)
+        lang2.config(width=32)
         lang2.grid(row=0, column=2)
 
         # Ô nhập và hiển thị văn bản
@@ -104,16 +112,13 @@ class TransalatorApp:
 
         # Tạo button chức năng dịch
         transalate_btn = tk.Button(self.root, text="Translate", font=("Arial", 12, "bold"), bg="#D0E1F9",
-                                   relief="raised", command=lambda: self.translate_text(lang1, lang2, text_input, text_output), width=35)
+                                   relief="raised", command=lambda: self.translate_text(self.lang1_var, self.lang2_var, text_input, text_output), width=35)
         transalate_btn.pack(pady=10)
 
     def translate_text(self, lang1, lang2, text_input, text_output):
         text = text_input.get("1.0", "end").strip()
         src_lang = lang1.get()
         dest_lang = lang2.get()
-
-        print('>>>>>>>>>>>>>>>> src_lang', src_lang)
-        print('>>>>>>>>>>>>>>>> dest_lang', dest_lang)
 
         if not text:
             text_output.delete("1.0", "end")
@@ -124,9 +129,6 @@ class TransalatorApp:
         dest_lang_code = self.LANGUAGE_CODES[dest_lang]
         translator = GoogleTrans(src_lang_code, dest_lang_code)
         result = translator.translate_text(text)
-
-        print(">>>>>> Text can dich: ", text)
-        print(">>>>>> Ket qua dich: ", result)
 
         text_output.delete("1.0", "end")
         text_output.insert("1.0", result)
