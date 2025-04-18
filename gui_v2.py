@@ -21,8 +21,10 @@ class TransalatorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Translator App by Khoi Nguyen")
-        self.root.geometry("650x450")
+        self.root.geometry("650x420")
         self.root.configure(bg=self.background_color)
+        # Khóa không cho resize theo chiều ngang và dọc
+        self.root.resizable(False, False)
 
         # Style cho ttk widgets
         self.style = ttk.Style()
