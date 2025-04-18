@@ -21,7 +21,7 @@ class TransalatorApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Ứng dụng dịch ngôn ngữ - khoi nguyen")
-        self.root.geometry("600x406")
+        self.root.geometry("650x450")
         self.root.configure(bg=self.background_color)
 
         # Style cho ttk widgets
@@ -58,35 +58,37 @@ class TransalatorApp:
         self.lang2_var = tk.StringVar(value="vietnamese")
 
         lang1 = ttk.Combobox(frame_lang, textvariable=self.lang1_var,
-                             values=language_list, width=30, state="readonly")
+                             values=language_list, width=37, state="readonly")
         lang1.grid(row=0, column=0)
 
-        swap_label = ttk.Label(frame_lang, text="↔", font=("Arial", 12))
-        swap_label.grid(row=0, column=1, padx=10)
+        swap_btn = ttk.Button(frame_lang, text="↔", width=3,
+                      command=self.swap_languages)
+        swap_btn.grid(row=0, column=1, padx=12)
 
         lang2 = ttk.Combobox(frame_lang, textvariable=self.lang2_var,
-                             values=language_list_no_first, width=30, state="readonly")
+                             values=language_list_no_first, width=37, state="readonly")
         lang2.grid(row=0, column=2)
 
         # Khung nhập và hiển thị văn bản
         frame_text = ttk.Frame(self.root)
         frame_text.pack()
 
-        text_input = tk.Text(frame_text, width=35, height=8)
-        text_input.grid(row=0, column=0, padx=15, pady=5)
+        text_input = tk.Text(frame_text, width=31, height=8)
+        text_input.grid(row=0, column=0, padx=22, pady=5)
 
-        text_output = tk.Text(frame_text, width=35, height=8)
-        text_output.grid(row=0, column=1, padx=15, pady=5)
+        text_output = tk.Text(frame_text, width=31, height=8)
+        text_output.grid(row=0, column=1, padx=22, pady=5)
 
-        # Frame chứa các nút
-        frame_buttons = ttk.Frame(root)
-        frame_buttons.pack()
+        # Căn các button về hai bên
+        frame_buttons = ttk.Frame(self.root)
+        frame_buttons.pack(fill="x", pady=5, padx=40)
 
         frame_buttons1 = ttk.Frame(frame_buttons)
         frame_buttons1.pack(side="left")
 
         frame_buttons2 = ttk.Frame(frame_buttons)
         frame_buttons2.pack(side="right")
+
 
         # Icon
         img_copy = Image.open(
@@ -116,8 +118,8 @@ class TransalatorApp:
 
         # Nút Translate
         transalate_btn = ttk.Button(self.root, text="Translate", style="My.TButton",
-                                    command=lambda: self.translate_text(self.lang1_var, self.lang2_var, text_input, text_output))
-        transalate_btn.pack(pady=10)
+                            command=lambda: self.translate_text(self.lang1_var, self.lang2_var, text_input, text_output))
+        transalate_btn.pack(pady=10, ipadx=100)  # Tăng width đáng kể
 
     def translate_text(self, lang1, lang2, text_input, text_output):
         text = text_input.get("1.0", "end").strip()
@@ -144,3 +146,10 @@ class TransalatorApp:
     def copy_text(self, text):
         cl = Clipboard(self.root)
         cl.copy_text(text)
+
+    def swap_languages(self):
+        lang1 = self.lang1_var.get()
+        lang2 = self.lang2_var.get()
+        self.lang1_var.set(lang2)
+        self.lang2_var.set(lang1)
+
