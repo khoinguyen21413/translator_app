@@ -149,8 +149,8 @@ class TransalatorApp:
         menu_bar.add_cascade(label="Feature", menu=feature_menu)
 
         help_menu = tk.Menu(menu_bar, tearoff=0)
-        help_menu.add_command(label="Instruct", command=self.show_help)
-        help_menu.add_command(label="Introduce", command=self.show_about)
+        help_menu.add_command(label="User guide", command=self.show_help)
+        help_menu.add_command(label="About", command=self.show_about)
         menu_bar.add_cascade(label="Help", menu=help_menu)
         
         self.root.config(menu=menu_bar)
@@ -220,10 +220,20 @@ class TransalatorApp:
         self.save_file(self.text_output)
 
     def show_help(self):
-        messagebox.showinfo("Instruct", "Application that helps translate languages. You can copy, listen and translate with this app.")
+        messagebox.showinfo(
+            "User Guide",
+            "👉 How to use Translator App:\n\n"
+            "1. Select source & target languages.\n"
+            "2. Enter text to translate.\n"
+            "3. Click 'Translate'.\n"
+            "4. Click 'Save' to export translation.\n\n"
+            "Shortcuts:\n"
+            "Ctrl+O – Open file\n"
+            "Ctrl+S – Save translation\n"
+        )
 
     def show_about(self):
-        messagebox.showinfo("Introduce", "Translator\nVersion 1.1\nAuthor: Khoi Nguyen")
+        messagebox.showinfo("About", "Translator App\nVersion: 1.2\nAuthor: Khoi Nguyen")
 
     def speak_text(self, text):
         tts = TextToSpeech()
