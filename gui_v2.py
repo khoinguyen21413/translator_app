@@ -6,7 +6,7 @@ from speech import TextToSpeech
 from transalator import GoogleTrans
 from tkinter import messagebox
 from tkinter import filedialog
-
+import os
 
 class TransalatorApp:
     LANGUAGE_CODES = {
@@ -31,6 +31,9 @@ class TransalatorApp:
 
         # Gán tổ hợp Ctrl+O cho hàm open_file
         self.root.bind_all("<Control-o>", self.open_file_event)
+
+        # Gán tổ hợp Ctrl+S cho hàm save_file
+        self.root.bind_all("<Control-s>", self.save_file_event)
 
         # Style cho ttk widgets
         self.style = ttk.Style()
@@ -133,8 +136,8 @@ class TransalatorApp:
         menu_bar = tk.Menu(self.root)
 
         file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="Open (Ctrl + O)", command= self.open_file)
-        file_menu.add_command(label="Save")
+        file_menu.add_command(label="Open  (Ctrl+O)", command= self.open_file)
+        file_menu.add_command(label="Save  (Ctrl+S)", command=lambda: self.save_file(self.text_output))
         file_menu.add_separator()
         file_menu.add_command(label="Quit", command=self.root.quit)
         menu_bar.add_cascade(label="File", menu=file_menu)
@@ -186,6 +189,35 @@ class TransalatorApp:
                 self.text_input.delete("1.0", "end")
                 self.text_input.insert("1.0", input_content)
 
+    def save_file(self, translated_text):
+        text_output = translated_text.get("1.0", "end").strip()
+        
+        if not text_output or text_output == "":
+            messagebox.showwarning("Thông báo", "Không có nội dung để lưu.\nVui lòng kiểm tra lại.")
+            return
+
+
+         # Hộp thoại lưu file
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt")],
+            title="Lưu bản dịch"
+        )
+
+        if file_path:
+            try:
+                # Mở file và ghi trong cùng khối try để bắt lỗi sớm
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(text_output)
+            except Exception as e:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                messagebox.showerror("Lỗi", f"Không thể lưu file:\n{e}")
+            else:
+                messagebox.showinfo("Thành công", "Đã lưu file thành công!")
+
+    def save_file_event(self, event):
+        self.save_file(self.text_output)
 
     def show_help(self):
         messagebox.showinfo("Instruct", "Application that helps translate languages. You can copy, listen and translate with this app.")
