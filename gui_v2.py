@@ -135,15 +135,15 @@ class TransalatorApp:
         file_menu.add_command(label="Quit", command=self.root.quit)
         menu_bar.add_cascade(label="File", menu=file_menu)
 
-        operations_menu = tk.Menu(menu_bar, tearoff= 0)
-        operations_menu.add_command(label="copy", command=lambda: self.copy_text(self.text_output.get("1.0", "end").strip()))
-        operations_menu.add_command(label="speak", command=lambda: self.speak_text(self.text_output.get("1.0", "end").strip()))
-        operations_menu.add_command(label="translate", command=lambda: self.translate_text(self.lang1_var, self.lang2_var, self.text_input, self.text_output))
-        menu_bar.add_cascade(label="Operations", menu=operations_menu)
+        feature_menu = tk.Menu(menu_bar, tearoff= 0)
+        feature_menu.add_command(label="Copy", command=lambda: self.copy_text(self.text_output.get("1.0", "end").strip()))
+        feature_menu.add_command(label="Speak", command=lambda: self.speak_text(self.text_output.get("1.0", "end").strip()))
+        feature_menu.add_command(label="Translate", command=lambda: self.translate_text(self.lang1_var, self.lang2_var, self.text_input, self.text_output))
+        menu_bar.add_cascade(label="Feature", menu=feature_menu)
 
         help_menu = tk.Menu(menu_bar, tearoff=0)
-        help_menu.add_command(label="Hướng dẫn", command=self.show_help)
-        help_menu.add_command(label="Thông tin", command=self.show_about)
+        help_menu.add_command(label="Instruct", command=self.show_help)
+        help_menu.add_command(label="Introduce", command=self.show_about)
         menu_bar.add_cascade(label="Help", menu=help_menu)
         
         self.root.config(menu=menu_bar)
@@ -167,10 +167,10 @@ class TransalatorApp:
         text_output.insert("1.0", result)
 
     def show_help(self):
-        messagebox.showinfo("Hướng dẫn", "Ứng dụng giúp dịch ngôn ngữ. Bạn có thể copy, nghe và dịch bằng app này.")
+        messagebox.showinfo("Instruct", "Application that helps translate languages. You can copy, listen and translate with this app.")
 
     def show_about(self):
-        messagebox.showinfo("Giới thiệu", "Ứng dụng dịch ngôn ngữ\nPhiên bản 1.1\nTác giả: Khoi Nguyen")
+        messagebox.showinfo("Introduce", "Translator\nVersion 1.1\nAuthor: Khoi Nguyen")
 
     def speak_text(self, text):
         tts = TextToSpeech()
