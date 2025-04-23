@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from clipboard import Clipboard
 from speech import TextToSpeech
 from transalator import GoogleTrans
+from tkinter import messagebox
 
 
 class TransalatorApp:
@@ -25,6 +26,7 @@ class TransalatorApp:
         self.root.configure(bg=self.background_color)
         # Khóa không cho resize theo chiều ngang và dọc
         self.root.resizable(False, False)
+        self.create_menu()
 
         # Style cho ttk widgets
         self.style = ttk.Style()
@@ -75,11 +77,11 @@ class TransalatorApp:
         frame_text = ttk.Frame(self.root)
         frame_text.pack()
 
-        text_input = tk.Text(frame_text, width=31, height=8)
-        text_input.grid(row=0, column=0, padx=22, pady=5)
+        self.text_input = tk.Text(frame_text, width=31, height=8)
+        self.text_input.grid(row=0, column=0, padx=22, pady=5)
 
-        text_output = tk.Text(frame_text, width=31, height=8)
-        text_output.grid(row=0, column=1, padx=22, pady=5)
+        self.text_output = tk.Text(frame_text, width=31, height=8)
+        self.text_output.grid(row=0, column=1, padx=22, pady=5)
 
         # Căn các button về hai bên
         frame_buttons = ttk.Frame(self.root)
@@ -103,25 +105,48 @@ class TransalatorApp:
 
         # Các nút âm thanh & sao chép
         sound_btn1 = ttk.Button(frame_buttons1, image=self.photo_sound,
-                                command=lambda: self.speak_text(text_input.get("1.0", "end").strip()))
+                                command=lambda: self.speak_text(self.text_input.get("1.0", "end").strip()))
         sound_btn1.grid(row=0, column=0, padx=10, pady=5)
 
         copy_btn1 = ttk.Button(frame_buttons1, image=self.photo_copy,
-                               command=lambda: self.copy_text(text_input.get("1.0", "end").strip()))
+                               command=lambda: self.copy_text(self.text_input.get("1.0", "end").strip()))
         copy_btn1.grid(row=0, column=1, padx=10, pady=5)
 
         sound_btn2 = ttk.Button(frame_buttons2, image=self.photo_sound,
-                                command=lambda: self.speak_text(text_output.get("1.0", "end").strip()))
+                                command=lambda: self.speak_text(self.text_output.get("1.0", "end").strip()))
         sound_btn2.grid(row=0, column=0, padx=10, pady=5)
 
         copy_btn2 = ttk.Button(frame_buttons2, image=self.photo_copy,
-                               command=lambda: self.copy_text(text_output.get("1.0", "end").strip()))
+                               command=lambda: self.copy_text(self.text_output.get("1.0", "end").strip()))
         copy_btn2.grid(row=0, column=1, padx=10, pady=5)
 
         # Nút Translate
         transalate_btn = ttk.Button(self.root, text="Translate", style="My.TButton",
-                            command=lambda: self.translate_text(self.lang1_var, self.lang2_var, text_input, text_output))
+                            command=lambda: self.translate_text(self.lang1_var, self.lang2_var, self.text_input, self.text_output))
         transalate_btn.pack(pady=10, ipadx=100)  # Tăng width đáng kể
+
+    def create_menu(self):
+        menu_bar = tk.Menu(self.root)
+
+        file_menu = tk.Menu(menu_bar, tearoff=0)
+        file_menu.add_command(label="Open")
+        file_menu.add_command(label="Save")
+        file_menu.add_separator()
+        file_menu.add_command(label="Quit", command=self.root.quit)
+        menu_bar.add_cascade(label="File", menu=file_menu)
+
+        operations_menu = tk.Menu(menu_bar, tearoff= 0)
+        operations_menu.add_command(label="copy", command=lambda: self.copy_text(self.text_output.get("1.0", "end").strip()))
+        operations_menu.add_command(label="speak", command=lambda: self.speak_text(self.text_output.get("1.0", "end").strip()))
+        operations_menu.add_command(label="translate", command=lambda: self.translate_text(self.lang1_var, self.lang2_var, self.text_input, self.text_output))
+        menu_bar.add_cascade(label="Operations", menu=operations_menu)
+
+        help_menu = tk.Menu(menu_bar, tearoff=0)
+        help_menu.add_command(label="Hướng dẫn", command=self.show_help)
+        help_menu.add_command(label="Thông tin", command=self.show_about)
+        menu_bar.add_cascade(label="Help", menu=help_menu)
+        
+        self.root.config(menu=menu_bar)
 
     def translate_text(self, lang1, lang2, text_input, text_output):
         text = text_input.get("1.0", "end").strip()
@@ -140,6 +165,12 @@ class TransalatorApp:
 
         text_output.delete("1.0", "end")
         text_output.insert("1.0", result)
+
+    def show_help(self):
+        messagebox.showinfo("Hướng dẫn", "Ứng dụng giúp dịch ngôn ngữ. Bạn có thể copy, nghe và dịch bằng app này.")
+
+    def show_about(self):
+        messagebox.showinfo("Giới thiệu", "Ứng dụng dịch ngôn ngữ\nPhiên bản 1.1\nTác giả: Khoi Nguyen")
 
     def speak_text(self, text):
         tts = TextToSpeech()
