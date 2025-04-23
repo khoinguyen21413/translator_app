@@ -5,6 +5,7 @@ from clipboard import Clipboard
 from speech import TextToSpeech
 from transalator import GoogleTrans
 from tkinter import messagebox
+from tkinter import filedialog
 
 
 class TransalatorApp:
@@ -27,6 +28,9 @@ class TransalatorApp:
         # Khóa không cho resize theo chiều ngang và dọc
         self.root.resizable(False, False)
         self.create_menu()
+
+        # Gán tổ hợp Ctrl+O cho hàm open_file
+        self.root.bind_all("<Control-o>", self.open_file_event)
 
         # Style cho ttk widgets
         self.style = ttk.Style()
@@ -129,7 +133,7 @@ class TransalatorApp:
         menu_bar = tk.Menu(self.root)
 
         file_menu = tk.Menu(menu_bar, tearoff=0)
-        file_menu.add_command(label="Open")
+        file_menu.add_command(label="Open (Ctrl + O)", command= self.open_file)
         file_menu.add_command(label="Save")
         file_menu.add_separator()
         file_menu.add_command(label="Quit", command=self.root.quit)
@@ -165,6 +169,23 @@ class TransalatorApp:
 
         text_output.delete("1.0", "end")
         text_output.insert("1.0", result)
+
+    def open_file_event(self, event):
+        # Khi gọi từ bind, phải nhận tham số event
+        self.open_file()
+
+    def open_file(self):
+        file_path = filedialog.askopenfilename(
+            title="Chọn tệp",
+            filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+        )
+        if file_path:
+            with open(file_path, "r", encoding="utf-8") as f:
+                input_content = f.read()
+                print(input_content)
+                self.text_input.delete("1.0", "end")
+                self.text_input.insert("1.0", input_content)
+
 
     def show_help(self):
         messagebox.showinfo("Instruct", "Application that helps translate languages. You can copy, listen and translate with this app.")
