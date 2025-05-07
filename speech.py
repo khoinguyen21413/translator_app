@@ -1,10 +1,5 @@
 import pyttsx3
-
-
-# def speak_text(text):
-#     engine = pyttsx3.init()
-#     engine.say(text)
-#     engine.runAndWait()
+import threading
 
 class TextToSpeech:
     def __init__(self):
@@ -16,8 +11,30 @@ class TextToSpeech:
         # voices[1]: Giong Nu/ voices[0]: Giong nam
         self.engine.setProperty('voice', voices[1].id)
 
-    def speak(self, text):
-        if text:
-            print("Text can doc: ", text)
+        self.thread = None
+        self._stop_flag = threading.Event()
+    def speak(self, text, on_done=None):
+        if not text:
+            return
+
+        # Nếu đang đọc thì dừng lại trước
+        self.stop()
+
+        def run():
+            print("Text cần đọc:", text)
+            self._stop_flag.clear()
+
+            def on_end(name, completed):
+                if not self._stop_flag.is_set() and on_done:
+                    on_done()
+
+            self.engine.connect('finished-utterance', on_end)
             self.engine.say(text)
             self.engine.runAndWait()
+
+        self.thread = threading.Thread(target=run, daemon=True)
+        self.thread.start()
+
+    def stop(self):
+        self._stop_flag.set()
+        self.engine.stop()
