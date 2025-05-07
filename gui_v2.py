@@ -51,6 +51,9 @@ class TransalatorApp:
         # Custom style for Translate button
         self.style.configure("My.TButton", background="#D0E1F9", font=("Arial", 11, "bold"))
 
+        self.is_speaking = False
+        self.tts_instance = TextToSpeech()
+
         # Ảnh minh họa
         img = Image.open(
             "D:\\O D\\Tin học 6\\python_app\\translator_app\\assets\\transalator_image_1.jpg").resize((180, 114), Image.LANCZOS)
@@ -65,16 +68,19 @@ class TransalatorApp:
         frame_lang = ttk.Frame(root)
         frame_lang.pack(pady=5)
 
-        self.lang1_var = tk.StringVar(value="english")
-        self.lang2_var = tk.StringVar(value="vietnamese")
+        self.lang1_var = tk.StringVar(value="auto")
+        self.lang2_var = tk.StringVar(value="english")
 
         lang1 = ttk.Combobox(frame_lang, textvariable=self.lang1_var,
                              values=language_list, width=37, state="readonly")
         lang1.grid(row=0, column=0)
 
-        swap_btn = ttk.Button(frame_lang, text="↔", width=3,
+        self.swap_btn = ttk.Button(frame_lang, text="↔", width=3,
                       command=self.swap_languages)
-        swap_btn.grid(row=0, column=1, padx=12)
+        self.swap_btn.grid(row=0, column=1, padx=12)
+        self.swap_btn.config(state=tk.DISABLED)
+
+        self.lang1_var.trace_add("write", self.check_language_and_toggle_button)
 
         lang2 = ttk.Combobox(frame_lang, textvariable=self.lang2_var,
                              values=language_list_no_first, width=37, state="readonly")
@@ -233,11 +239,21 @@ class TransalatorApp:
         )
 
     def show_about(self):
-        messagebox.showinfo("About", "Translator App\nVersion: 1.2\nAuthor: Khoi Nguyen")
+        messagebox.showinfo("About", "Translator App\nVersion: 1.3\nAuthor: Khoi Nguyen")
 
     def speak_text(self, text):
-        tts = TextToSpeech()
-        tts.speak(text=text)
+        if not text:
+            return
+
+        if not self.is_speaking:
+            self.is_speaking = True
+            self.tts_instance.speak(text=text, on_done=self.on_speak_done)
+        else:
+            self.tts_instance.stop()
+            self.is_speaking = False
+
+    def on_speak_done(self):
+        self.is_speaking = False
 
     def copy_text(self, text):
         cl = Clipboard(self.root)
@@ -248,4 +264,11 @@ class TransalatorApp:
         lang2 = self.lang2_var.get()
         self.lang1_var.set(lang2)
         self.lang2_var.set(lang1)
+
+    def check_language_and_toggle_button(self, *args):
+        selected = self.lang1_var.get()
+        if selected != "auto":
+            self.swap_btn.config(state=tk.NORMAL) # Kích hoạt nút
+        else:
+            self.swap_btn.config(state=tk.DISABLED) # Vô hiệu hóa nút
 
